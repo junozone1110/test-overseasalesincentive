@@ -2,3 +2,17 @@ Django==4.2.7
 django-bootstrap5==23.3
 Pillow>=10.0.0
 python-decouple==3.8
+
+# PostgreSQL用データベースドライバ
+psycopg2-binary==2.9.7
+
+# Redis統合
+redis==5.0.1
+django-redis==5.4.0
+
+# 本番環境用
+gunicorn==21.2.0
+whitenoise==6.6.0
+
+# セキュリティ・CORS
+django-cors-headers==4.3.1
