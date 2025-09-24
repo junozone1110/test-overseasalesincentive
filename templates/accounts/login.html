@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}ログイン - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header text-center">
+                {% if COMPANY_SETTINGS.COMPANY_LOGO_URL %}
+                    <img src="{{ COMPANY_SETTINGS.COMPANY_LOGO_URL }}" alt="{{ COMPANY_SETTINGS.COMPANY_NAME }}" class="mb-3" style="max-height: 60px;">
+                {% endif %}
+                <h4 class="mb-0">{{ COMPANY_SETTINGS.SYSTEM_NAME }}</h4>
+                <small class="text-muted">ログイン</small>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="username" class="form-label">ユーザー名</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">パスワード</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">ログイン</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+```
+

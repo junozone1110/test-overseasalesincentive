@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ product.name }} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'product_list' %}">商品一覧</a></li>
+                <li class="breadcrumb-item active">{{ product.name }}</li>
+            </ol>
+        </nav>
+        
+        <div class="card">
+            <div class="row g-0">
+                <div class="col-md-5">
+                    {% if product.image %}
+                    <img src="{{ product.image.url }}" class="img-fluid rounded-start h-100" alt="{{ product.name }}" style="object-fit: cover; min-height: 300px;">
+                    {% else %}
+                    <div class="bg-light d-flex align-items-center justify-content-center rounded-start" style="min-height: 300px;">
+                        <i class="bi bi-image text-muted" style="font-size: 4rem;"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-7">
+                    <div class="card-body h-100 d-flex flex-column">
+                        <h3 class="card-title">{{ product.name }}</h3>
+                        
+                        <div class="mb-3">
+                            <span class="badge {% if product.category.name == 'digital_gift' %}bg-success{% else %}bg-info{% endif %} fs-6">
+                                {{ product.category_name }}
+                            </span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <h4 class="text-primary">
+                                <i class="bi bi-coin"></i> {{ product.required_points }} ポイント
+                            </h4>
+                        </div>
+                        
+                        <div class="mb-4 flex-grow-1">
+                            <h6>商品説明</h6>
+                            <p class="text-muted">
+                                {% if product.description %}
+                                    {{ product.description|linebreaks }}
+                                {% else %}
+                                    商品説明はありません。
+                                {% endif %}
+                            </p>
+                        </div>
+                        
+                        <div class="mt-auto">
+                            {% if can_exchange %}
+                                <form method="post" action="{% url 'exchange_product' product.id %}" onsubmit="return confirm('この商品と交換しますか？\n使用ポイント: {{ product.required_points }}pt');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-primary btn-lg w-100">
+                                        <i class="bi bi-arrow-right-circle"></i> この商品と交換する
+                                    </button>
+                                </form>
+                            {% else %}
+                                <button class="btn btn-outline-secondary btn-lg w-100" disabled>
+                                    <i class="bi bi-x-circle"></i> ポイントが不足しています
+                                </button>
+                                <small class="text-muted mt-2 d-block">
+                                    必要: {{ product.required_points }}pt / 保有: {{ category_points }}pt
+                                </small>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <!-- ポイント残高 -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-wallet2"></i> 保有ポイント
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-12 mb-3">
+                        <div class="h3 {% if product.category.name == 'digital_gift' %}text-success{% else %}text-info{% endif %}">
+                            {{ category_points }}
+                        </div>
+                        <small class="text-muted">{{ product.category_name }}</small>
+                    </div>
+                </div>
+                <hr>
+                <div class="row text-center">
+                    <div class="col-6">
+                        <div class="h6 text-success">{{ points_summary.digital_gift|default:0 }}</div>
+                        <small class="text-muted">デジタルギフト</small>
+                    </div>
+                    <div class="col-6">
+                        <div class="h6 text-info">{{ points_summary.corporate_product|default:0 }}</div>
+                        <small class="text-muted">企業商品</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- クイックアクション -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">クイックアクション</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{% url 'product_list' %}" class="btn btn-outline-primary">
+                        <i class="bi bi-arrow-left"></i> 商品一覧に戻る
+                    </a>
+                    <a href="{% url 'exchange_history' %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-clock-history"></i> 交換履歴を見る
+                    </a>
+                    <a href="{% url 'dashboard' %}" class="btn btn-outline-info">
+                        <i class="bi bi-speedometer2"></i> ダッシュボード
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

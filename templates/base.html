@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ COMPANY_SETTINGS.SYSTEM_NAME }}{% endblock %}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --company-primary: {{ COMPANY_SETTINGS.COMPANY_COLOR_PRIMARY }};
+            --company-secondary: {{ COMPANY_SETTINGS.COMPANY_COLOR_SECONDARY }};
+            
+            /* Abukuma風デザイントークン */
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+            --spacing-xxl: 48px;
+            
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+            
+            --color-gray-50: #f9fafb;
+            --color-gray-100: #f3f4f6;
+            --color-gray-200: #e5e7eb;
+            --color-gray-300: #d1d5db;
+            --color-gray-400: #9ca3af;
+            --color-gray-500: #6b7280;
+            --color-gray-600: #4b5563;
+            --color-gray-700: #374151;
+            --color-gray-800: #1f2937;
+            --color-gray-900: #111827;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--color-gray-800);
+        }
+        
+        /* ナビゲーション */
+        .navbar {
+            box-shadow: var(--shadow-sm);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 600;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .navbar-brand img {
+            height: 32px;
+            margin-right: var(--spacing-sm);
+        }
+        
+        .navbar-nav .nav-link {
+            font-weight: 500;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--radius-md);
+            margin: 0 var(--spacing-xs);
+            transition: all 0.2s ease;
+        }
+        
+        .navbar-nav .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* カード */
+        .card {
+            border: none;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.2s ease;
+        }
+        
+        .card:hover {
+            box-shadow: var(--shadow-md);
+        }
+        
+        .card-header {
+            background-color: var(--color-gray-50);
+            border-bottom: 1px solid var(--color-gray-200);
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
+            padding: var(--spacing-lg);
+            font-weight: 600;
+        }
+        
+        .card-body {
+            padding: var(--spacing-lg);
+        }
+        
+        /* ボタン */
+        .btn {
+            border-radius: var(--radius-md);
+            font-weight: 500;
+            padding: var(--spacing-sm) var(--spacing-lg);
+            transition: all 0.2s ease;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--company-primary) 0%, color-mix(in srgb, var(--company-primary) 90%, black) 100%);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, color-mix(in srgb, var(--company-primary) 85%, black) 0%, color-mix(in srgb, var(--company-primary) 75%, black) 100%);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-1px);
+        }
+        
+        .btn-outline-primary {
+            border: 2px solid var(--company-primary);
+            color: var(--company-primary);
+            background: transparent;
+        }
+        
+        .btn-outline-primary:hover {
+            background: var(--company-primary);
+            border-color: var(--company-primary);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-outline-secondary {
+            border: 2px solid var(--color-gray-300);
+            color: var(--color-gray-600);
+            background: transparent;
+        }
+        
+        .btn-outline-secondary:hover {
+            background: var(--color-gray-100);
+            border-color: var(--color-gray-400);
+            color: var(--color-gray-700);
+        }
+        
+        /* バッジ */
+        .badge {
+            font-weight: 500;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--radius-sm);
+        }
+        
+        /* アラート */
+        .alert {
+            border: none;
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md) var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .alert-success {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            color: #065f46;
+        }
+        
+        .alert-warning {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #92400e;
+        }
+        
+        .alert-danger {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            color: #991b1b;
+        }
+        
+        /* テーブル */
+        .table {
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+        
+        .table thead th {
+            background-color: var(--color-gray-50);
+            font-weight: 600;
+            border-bottom: 2px solid var(--color-gray-200);
+            padding: var(--spacing-md) var(--spacing-lg);
+        }
+        
+        .table tbody td {
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-bottom: 1px solid var(--color-gray-100);
+        }
+        
+        .table-hover tbody tr:hover {
+            background-color: var(--color-gray-50);
+        }
+        
+        /* フォーム */
+        .form-control, .form-select {
+            border: 2px solid var(--color-gray-200);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-sm) var(--spacing-md);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--company-primary);
+            box-shadow: 0 0 0 3px rgba(var(--company-primary), 0.1);
+        }
+        
+        .form-label {
+            font-weight: 500;
+            color: var(--color-gray-700);
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        /* ページネーション */
+        .pagination .page-link {
+            border: none;
+            border-radius: var(--radius-md);
+            margin: 0 var(--spacing-xs);
+            color: var(--color-gray-600);
+            font-weight: 500;
+        }
+        
+        .pagination .page-item.active .page-link {
+            background: var(--company-primary);
+            color: white;
+        }
+        
+        /* カスタムプロパティ */
+        .bg-primary {
+            background: linear-gradient(135deg, var(--company-primary) 0%, color-mix(in srgb, var(--company-primary) 90%, black) 100%) !important;
+        }
+        
+        .text-primary {
+            color: var(--company-primary) !important;
+        }
+        
+        /* フッター */
+        .company-footer {
+            background: linear-gradient(135deg, var(--color-gray-50) 0%, var(--color-gray-100) 100%);
+            padding: var(--spacing-xxl) 0 var(--spacing-lg);
+            margin-top: var(--spacing-xxl);
+            border-top: 1px solid var(--color-gray-200);
+        }
+        
+        /* ユーティリティクラス */
+        .rounded-modern {
+            border-radius: var(--radius-lg);
+        }
+        
+        .shadow-modern {
+            box-shadow: var(--shadow-md);
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, var(--company-primary) 0%, color-mix(in srgb, var(--company-primary) 70%, #6366f1) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'dashboard' %}">
+                {% if COMPANY_SETTINGS.COMPANY_LOGO_URL %}
+                    <img src="{{ COMPANY_SETTINGS.COMPANY_LOGO_URL }}" alt="{{ COMPANY_SETTINGS.COMPANY_NAME }}">
+                {% else %}
+                    <i class="bi bi-coin"></i>
+                {% endif %}
+                {{ COMPANY_SETTINGS.SYSTEM_SHORT_NAME }}
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                {% if user.is_authenticated %}
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'dashboard' %}">
+                            <i class="bi bi-speedometer2"></i> ダッシュボード
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'point_history' %}">
+                            <i class="bi bi-clock-history"></i> ポイント履歴
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'product_list' %}">
+                            <i class="bi bi-cart"></i> 商品交換
+                        </a>
+                    </li>
+                    {% if user.is_admin %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-gear"></i> 管理
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'admin_dashboard' %}">管理ダッシュボード</a></li>
+                            <li><a class="dropdown-item" href="{% url 'grant_points' %}">ポイント付与</a></li>
+                            <li><a class="dropdown-item" href="{% url 'bulk_grant_points' %}">一括ポイント付与</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'admin_exchange_list' %}">商品交換管理</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/admin/">Django管理画面</a></li>
+                        </ul>
+                    </li>
+                    {% endif %}
+                </ul>
+                
+                <div class="navbar-nav">
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person"></i> {{ user.full_name }}さん
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{% url 'profile' %}">プロフィール</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}">ログアウト</a></li>
+                        </ul>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    <i class="bi bi-{% if message.tags == 'error' %}exclamation-triangle{% elif message.tags == 'success' %}check-circle{% elif message.tags == 'warning' %}exclamation-circle{% else %}info-circle{% endif %}"></i>
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- フッター -->
+    <footer class="company-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h6>{{ COMPANY_SETTINGS.COMPANY_NAME }}</h6>
+                    <p class="text-muted small">{{ COMPANY_SETTINGS.SYSTEM_NAME }}</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="mb-2">
+                        {% if COMPANY_SETTINGS.COMPANY_URL %}
+                            <a href="{{ COMPANY_SETTINGS.COMPANY_URL }}" target="_blank" class="text-decoration-none me-3">
+                                <i class="bi bi-globe"></i> 企業サイト
+                            </a>
+                        {% endif %}
+                        {% if COMPANY_SETTINGS.SUPPORT_EMAIL %}
+                            <a href="mailto:{{ COMPANY_SETTINGS.SUPPORT_EMAIL }}" class="text-decoration-none">
+                                <i class="bi bi-envelope"></i> サポート
+                            </a>
+                        {% endif %}
+                    </div>
+                    <p class="text-muted small mb-0">{{ COMPANY_SETTINGS.COPYRIGHT_TEXT }}</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    
+    {% block extra_js %}
+    {% endblock %}
+</body>
+</html>
